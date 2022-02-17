@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<header class="p-3 bg-dark text-white" style="margin-bottom: 48px;">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
+               style="margin-right: 24px;">
+                C.O.N.E
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/meals/create" class="nav-link px-2 text-secondary">Create Meal</a></li>
+            </ul>
+
+            <form action="/meals/search" method="get" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input name="title" id="title" type="text" class="form-control form-control-dark" placeholder="title"
+                       aria-label="Search">
+            </form>
+
+            <button type="submit" class="btn btn-dark" disabled style="margin-right: 12px;">&</button>
+
+            <form action="/meals/search" method="get" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input name="type" id="type" type="text" class="form-control form-control-dark" placeholder="type"
+                       aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button id="searchBtn" type="submit" class="btn btn-warning">Search</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</header>
+
+
+<div class="container">
+    <div class="row">
+
+        <div th:if="${error} != null" th:text="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span>Error: username and secret not correct!</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <h3>Delete meal</h3>
+        <form th:action="'/meals/' + ${meal.getId()}" method="post">
+
+            <div class="mb-3">
+                <label for="mealID" class="form-label">ID</label>
+                <input name="mealId" type="number" class="form-control" id="mealID" aria-describedby="numberID" th:value="${meal.getId()}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="titleMeal" class="form-label">Title</label>
+                <input name="titleMeal" type="text" class="form-control" id="titleMeal" th:value="${meal.getTitle()}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="typeMeal" class="form-label">Type</label>
+                <select name="typeMeal" id="typeMeal" class="form-select" aria-label="Default select example" disabled>
+                    <option th:value="${meal.getType().getDisplayName()}" th:text="${meal.getType().getDisplayName()}" selected></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input name="username" type="text" class="form-control" id="username" placeholder="... username ...">
+            </div>
+
+            <div class="mb-3">
+                <label for="secret" class="form-label">Secret</label>
+                <input name="secret" type="password" class="form-control" id="secret" placeholder="... secret ...">
+            </div>
+
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+
+<!-- Optional JavaScript; choose one of the two! -->
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+-->
+
+<script>
+    let searchBtn = document.getElementById('searchBtn');
+    let title = document.getElementById('title');
+    let type = document.getElementById('type');
+
+    searchBtn.addEventListener('click', () => {
+        let qp = "";
+
+        if (title.value.length > 0) {
+            qp += "?title=" + title.value;
+            if (type.value.length > 0) {
+                qp += "&type=" + type.value;
+            }
+
+            window.location.replace(window.location.origin + "/meals/search" + qp);
+            //console.log(window.location.origin + "/meals/search" + qp);
+        }
+    });
+</script>
+</body>
+</html>
